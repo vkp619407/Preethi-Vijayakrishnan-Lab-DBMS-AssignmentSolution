@@ -1,0 +1,34 @@
+select cus_gender,count(cus_gender) from customer where cus_id in 
+( select cus_id from `order` group by cus_id having sum(ord_amount) >= 3000)
+group by cus_gender order by cus_gender;
+
+
+select ord_id,ord_amount,ord_date,o.cus_id,o.pricing_id,pro_name
+from `order` o,customer c,supplier_pricing sp,product p
+where o.cus_id=c.cus_id and
+o.pricing_id=sp.pricing_id and
+sp.pro_id =p.pro_id and
+o.cus_id =2;
+
+
+select * from supplier where supp_id in ( select supp_id from supplier_pricing group by supp_id having count(supp_id) > 1);
+
+
+select c.cat_id,cat_name,pro_name,min_price from 
+(select cat_id,p.pro_id,min(supp_price) min_price from supplier_pricing sp , product p where sp.pro_id=p.pro_id group by p.cat_id) 
+as cat_min_price, category c, product p
+where c.cat_id=p.cat_id and p.pro_id=cat_min_price.pro_id;
+
+
+select p.pro_id,pro_name from product p, supplier_pricing sp, `order` o
+where p.pro_id= sp.pro_id and sp.pricing_id=o.pricing_id and o.ord_date>'2021-10-05';
+
+
+
+select cus_name,cus_gender from customer where cus_name like 'A%' or cus_name like '%A';
+
+
+
+
+
+
